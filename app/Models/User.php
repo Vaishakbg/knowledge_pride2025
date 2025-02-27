@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -20,6 +21,13 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'alt_email',
+        'phone',
+        'alt_phone',
+        'country',
+        'city',
+        'heard_about_us',
+        'course_id',
         'password',
     ];
 
@@ -33,6 +41,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function course(): BelongsTo
+    {
+        return $this->belongsTo(Course::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -42,7 +55,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password' => 'hashed'
         ];
     }
 }

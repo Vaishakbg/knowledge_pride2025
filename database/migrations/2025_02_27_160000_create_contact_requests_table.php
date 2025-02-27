@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('contact_requests', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete(); // Nullable for guests
+            $table->string('name');
+            $table->string('email');
+            $table->string('phone')->nullable();
+            $table->text('message');
+            $table->enum('type', ['general', 'callback', 'support', 'sales'])->default('general');
+            $table->enum('status', ['pending', 'resolved', 'spam'])->default('pending');
             $table->timestamps();
         });
     }

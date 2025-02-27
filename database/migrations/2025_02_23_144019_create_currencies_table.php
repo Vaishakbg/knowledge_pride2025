@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reviews', function (Blueprint $table) {
+        Schema::create('currencies', function (Blueprint $table) {
             $table->id();
+            $table->string('country');
+            $table->string('code', 3)->unique(); // Currency code (USD, INR, EUR)
+            $table->string('symbol', 10); // Currency symbol ($, ₹, €)
+            $table->decimal('rate', 10, 2)->default(1.00); // Conversion rate (default: 1.00)
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('currencies');
     }
 };
