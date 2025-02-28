@@ -6,24 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class OnlineAccess extends Model
+class UserSession extends Model
 {
     use HasFactory;
-
-    protected $table = 'online_access'; // Explicitly defining the table name
 
     protected $fillable = [
         'user_id',
         'course_id',
-        'is_active'
-    ];
-
-    protected $casts = [
-        'is_active' => 'boolean',
+        'login_time',
+        'logout_time',
+        'is_active',
     ];
 
     /**
-     * Get the user associated with this online access.
+     * Relationship with User
      */
     public function user(): BelongsTo
     {
@@ -31,7 +27,7 @@ class OnlineAccess extends Model
     }
 
     /**
-     * Get the course associated with this online access.
+     * Relationship with Course
      */
     public function course(): BelongsTo
     {

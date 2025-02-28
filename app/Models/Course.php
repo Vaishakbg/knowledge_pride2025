@@ -17,7 +17,9 @@ class Course extends Model
         'slug', 
         'course_short_name', 
         'category_id', 
-        'image', 
+        'image',
+        'banner_image',
+        'short_description', 
         'is_active',
         'admin_id',
     ];
@@ -44,5 +46,14 @@ class Course extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+    public function features()
+    {
+        return $this->hasMany(CourseFeature::class);
+    }
+
+    public function tabs()
+    {
+        return $this->hasMany(CourseTab::class);
     }
 }

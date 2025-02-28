@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('online_access', function (Blueprint $table) {
+        Schema::create('course_features', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
-            $table->boolean('is_active')->default(true);
+            $table->foreignId('course_id')->constrained()->onDelete('cascade'); 
+            $table->string('feature'); // Example: "Lifetime Access"
             $table->timestamps();
-        });
+        });        
     }
 
     /**
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('online_access');
+        Schema::dropIfExists('course_features');
     }
 };

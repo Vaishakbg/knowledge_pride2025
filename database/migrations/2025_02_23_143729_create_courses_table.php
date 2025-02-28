@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('course_short_name')->nullable();
             $table->foreignId('category_id')->nullable()->constrained('course_categories')->onDelete('set null'); 
             $table->string('image')->nullable();
+            $table->string('banner_image')->nullable();
+            $table->text('short_description')->nullable();
             $table->boolean('is_active')->default(true);
             $table->foreignId('admin_id')->nullable()->constrained('admins')->onDelete('set null');
             $table->timestamps();
