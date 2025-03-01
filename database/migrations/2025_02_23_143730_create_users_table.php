@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('alt_email')->nullable()->unique();
             $table->string('phone')->nullable();
             $table->string('alt_phone')->nullable();
-            $table->string('country')->nullable();
-            $table->string('city')->nullable();
+            $table->string('country_id')->nullable();
+            $table->string('city_id')->nullable();
             $table->string('heard_about_us')->nullable();
             $table->foreignId('course_id')->nullable()->constrained('courses')->nullOnDelete();
             $table->timestamp('email_verified_at')->nullable();

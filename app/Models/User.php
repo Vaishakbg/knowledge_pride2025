@@ -24,11 +24,12 @@ class User extends Authenticatable
         'alt_email',
         'phone',
         'alt_phone',
-        'country',
-        'city',
+        'country_id',
+        'city_id',
         'heard_about_us',
         'course_id',
         'password',
+        'email_verified_at',
     ];
 
     /**
@@ -44,6 +45,16 @@ class User extends Authenticatable
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
     }
 
     /**
