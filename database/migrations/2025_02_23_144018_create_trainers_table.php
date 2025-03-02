@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->string('alt_phone')->nullable();
             $table->string('image')->nullable();
-            $table->string('country')->nullable();
-            $table->string('city')->nullable();
+            $table->foreignId('country_id')->nullable()->constrained('countries')->nullOnDelete();
+            $table->foreignId('city_id')->nullable()->constrained('cities')->nullOnDelete();
             $table->text('about')->nullable();
             $table->timestamps();
         });

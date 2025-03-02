@@ -8,7 +8,9 @@ use App\Models\City;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -28,50 +30,55 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('alt_email')
-                    ->email()
-                    ->maxLength(255),
-                TextInput::make('phone')
-                    ->tel()
-                    ->maxLength(255),
-                TextInput::make('alt_phone')
-                    ->tel()
-                    ->maxLength(255),
-                    Select::make('country_id')
-                    ->label('Country')
-                    ->placeholder('Select a Country')
-                    ->relationship('country', 'name') // Sends only 'id' to DB
-                    ->live() // Ensures dynamic updates
-                    ->required(),
-                
-                Select::make('city_id')
-                    ->label('City')
-                    ->placeholder('Select a City')
-                    ->options(fn (callable $get) => 
-                        $get('country_id') 
-                            ? City::where('country_id', $get('country_id'))->pluck('name', 'id')->toArray()
-                            : []
-                    )
-                    ->searchable()
-                    ->loadingMessage('Loading cities...')
-                    ->required(),
-                Hidden::make('heard_about_us')
-                    ->default('By Admin'),
-                Select::make('course_id')
-                    ->relationship('course', 'course_full_name'),
-                DateTimePicker::make('email_verified_at'),
-                TextInput::make('password')
-                    ->password()
-                    ->required()
-                    ->maxLength(255),
-            ])->columns(3);
+                Section::make([
+                    Grid::make()->schema([
+                        TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('email')
+                            ->email()
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('phone')
+                            ->tel()
+                            ->maxLength(255),
+                        TextInput::make('alt_email')
+                            ->email()
+                            ->maxLength(255),
+                        TextInput::make('alt_phone')
+                            ->tel()
+                            ->maxLength(255),
+                        Select::make('country_id')
+                            ->label('Country')
+                            ->placeholder('Select a Country')
+                            ->relationship('country', 'name') // Sends only 'id' to DB
+                            ->live() // Ensures dynamic updates
+                            ->required()
+                            ->reactive() // Makes the field reactive
+                            ->afterStateUpdated(fn (callable $set) => $set('city_id', null)),
+                        Select::make('city_id')
+                            ->label('City')
+                            ->placeholder('Select a City')
+                            ->options(fn (callable $get) => 
+                                $get('country_id') 
+                                    ? City::where('country_id', $get('country_id'))->pluck('name', 'id')->toArray()
+                                    : []
+                            )
+                            ->searchable()
+                            ->loadingMessage('Loading cities...')
+                            ->required(),
+                        Hidden::make('heard_about_us')
+                            ->default('By Admin'),
+                        Select::make('course_id')
+                            ->relationship('course', 'course_full_name'),
+                        DateTimePicker::make('email_verified_at'),
+                        TextInput::make('password')
+                            ->password()
+                            ->required()
+                            ->maxLength(255),
+                    ])->columns(3),
+                ]),
+            ]);
     }
 
     public static function table(Table $table): Table
