@@ -27,6 +27,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('kp-admin-panel')
             ->path('kp-admin-panel')
             ->login()
+            ->brandName('Knowledge Pride')
+            ->brandLogo(asset('images/logo.png')) // Set custom logo
+            ->favicon(asset('images/favicon.ico'))
             ->authGuard('admin') // Use the admin guard
             ->colors([
                 'primary' => Color::Amber,

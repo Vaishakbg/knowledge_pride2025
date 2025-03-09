@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('course_id')->constrained()->onDelete('cascade'); 
             $table->string('feature'); // Example: "Lifetime Access"
+            $table->integer('order')->nullable(); // Add order column
             $table->timestamps();
         });        
     }
@@ -27,3 +28,4 @@ return new class extends Migration
         Schema::dropIfExists('course_features');
     }
 };
+
