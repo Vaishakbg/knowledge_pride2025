@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,16 +14,16 @@ class Schedule extends Model
 
     protected $fillable = [
         'course_id',
-        'country',
+        'country_id',
         'type',
-        'city',
+        'city_id',
         'trainer_id',
         'start_date',
         'end_date',
         'start_time',
         'end_time',
         'std_price',
-        'currency_id',
+        'currency',
         'eb_price',
         'eb_date',
         'venue',
@@ -43,6 +44,21 @@ class Schedule extends Model
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_CANCELLED = 'cancelled';
 
+    public function startTime(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => date('H:i:s', strtotime($value)), // Convert to 24-hour format
+            get: fn ($value) => date('h:i A', strtotime($value))  // Display in 12-hour format
+        );
+    }
+
+    public function endTime(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => date('H:i:s', strtotime($value)),
+            get: fn ($value) => date('h:i A', strtotime($value))
+        );
+    }
     // Relationship Definitions
     public function course()
     {
@@ -54,8 +70,13 @@ class Schedule extends Model
         return $this->belongsTo(Trainer::class);
     }
 
-    public function currency()
+    public function country()
     {
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(Country::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class); 
     }
 }

@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
             $table->foreignId('trainer_id')->nullable()->constrained('trainers')->onDelete('set null');
-            $table->foreignId('currency_id')->nullable()->constrained('currencies')->onDelete('set null');
-            $table->string('country');
-            $table->string('city');
+            $table->string('currency');
+            $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
+            $table->foreignId('city_id')->constrained('cities')->onDelete('cascade');
             $table->enum('type', ['classroom', 'online', 'hybrid'])->default('classroom');
             $table->date('start_date');
             $table->date('end_date');
