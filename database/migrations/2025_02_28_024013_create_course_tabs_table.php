@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title'); // Example: "Curriculum", "Instructor", "FAQ"
             $table->string('icon_class'); // Example: "fa fa-book", "fa fa-user", "fa fa-question"
             $table->longText('html_content'); // Store HTML content
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
         

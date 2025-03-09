@@ -9,7 +9,7 @@ class CourseTab extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['course_id', 'title', 'icon_class', 'html_content'];
+    protected $fillable = ['course_id', 'title', 'icon_class', 'html_content', 'is_active'];
 
     public function course()
     {
