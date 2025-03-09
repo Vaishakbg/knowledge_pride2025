@@ -2,14 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CourseFeatureResource\Pages;
-use App\Filament\Resources\CourseFeatureResource\RelationManagers;
-use App\Models\CourseFeature;
+use App\Filament\Resources\ReviewResource\Pages;
+use App\Filament\Resources\ReviewResource\RelationManagers;
+use App\Models\Review;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -17,11 +20,11 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class CourseFeatureResource extends Resource
+class ReviewResource extends Resource
 {
-    protected static ?string $model = CourseFeature::class;
+    protected static ?string $model = Review::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-sparkles';
+    protected static ?string $navigationIcon = 'heroicon-o-star';
 
     public static function form(Form $form): Form
     {
@@ -29,34 +32,47 @@ class CourseFeatureResource extends Resource
             ->schema([
                 Section::make([
                     Grid::make()->schema([
-                        Select::make('course_id')
+                        TextInput::make('name')
                             ->required()
-                            ->relationship('course', 'course_full_name'),
-                        TextInput::make('feature')
+                            ->maxLength(255),
+                        Select::make('trainer_id')
+                            ->relationship('trainer', 'name'),
+                        Select::make('rating')
                             ->required()
-                            ->maxLength(255)
+                            ->options([
+                                3 => '3',
+                                4 => '4',
+                                5 => '5',
+                            ])
+                            ->default(4),
+                        Textarea::make('review')
+                            ->required()
                             ->columnSpan(2),
-                        Select::make('order')
-                            ->label('Order')
-                            ->options(array_combine(range(1, 8), range(1, 8)))
-                            ->required()
-                        ])->columns(4),
-                    ])
-                ]);
+                        FileUpload::make('image')
+                            ->directory('reviewers')
+                            ->image(),
+                        Toggle::make('is_approved')
+                            ->default(true)
+                            ->required(),
+                    ])->columns(3)
+                ])
+            ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('course.course_full_name')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('feature')
+                Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('order')
+                Tables\Columns\TextColumn::make('trainer.name')
+                    ->sortable(),
+                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\TextColumn::make('rating')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\IconColumn::make('is_approved')
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -93,9 +109,9 @@ class CourseFeatureResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCourseFeatures::route('/'),
-            'create' => Pages\CreateCourseFeature::route('/create'),
-            'edit' => Pages\EditCourseFeature::route('/{record}/edit'),
+            'index' => Pages\ListReviews::route('/'),
+            'create' => Pages\CreateReview::route('/create'),
+            'edit' => Pages\EditReview::route('/{record}/edit'),
         ];
     }
 }
