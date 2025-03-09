@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('alt_email')->nullable();
             $table->string('phone')->nullable();
             $table->string('alt_phone')->nullable();
-            $table->string('country')->nullable();
-            $table->string('city')->nullable();
+            $table->foreignId('country_id')->nullable()->constrained('countries')->nullOnDelete();
+            $table->foreignId('city_id')->nullable()->constrained('cities')->nullOnDelete();
             $table->enum('type', ['direct', 'custom_payment'])->default('direct'); // Default to 'direct'
             
             $table->timestamps();

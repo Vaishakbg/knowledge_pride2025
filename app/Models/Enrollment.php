@@ -19,14 +19,18 @@ class Enrollment extends Model
         'alt_email',
         'phone',
         'alt_phone',
-        'country',
-        'city',
+        'country_id',
+        'city_id',
         'type'
     ];
 
     protected $casts = [
         'type' => 'string', // Enum values: 'direct', 'custom_payment'
     ];
+
+    // Enum values for type
+    public const TYPE_Direct = 'direct';
+    public const TYPE_CUSTOM_PAYMENT = 'custom_payment';
 
     /**
      * Relationships
@@ -44,5 +48,15 @@ class Enrollment extends Model
     public function schedule()
     {
         return $this->belongsTo(Schedule::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class); 
     }
 }
