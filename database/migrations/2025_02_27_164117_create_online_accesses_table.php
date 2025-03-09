@@ -17,6 +17,9 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
+
+            // ✅ Prevents duplicate entries for the same user & course
+            $table->unique(['user_id', 'course_id']);
         });
     }
 
